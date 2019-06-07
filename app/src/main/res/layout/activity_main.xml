@@ -13,10 +13,20 @@
         android:id="@+id/bottomNavBar"
         android:layout_width="match_parent"
         android:background="@android:color/white"
+        app:itemTextColor="@drawable/bottom_selector"
         app:menu="@menu/menu_bottom_navigation"
-        app:itemTextColor="@color/colorMenu"
+        app:labelVisibilityMode="labeled"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"></android.support.design.widget.BottomNavigationView>
+
+
+    <FrameLayout
+        android:id="@+id/frameFragment"
+        android:layout_width="match_parent"
+        android:layout_above="@id/bottomNavBar"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
 
 </RelativeLayout>

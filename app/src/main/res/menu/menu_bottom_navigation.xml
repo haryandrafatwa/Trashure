@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menuBeranda" android:title="Beranda"
-        android:icon="@drawable/ic_home" android:iconTint="@color/colorMenu" >
-    </item>
-    <item android:id="@+id/menuPenukaran" android:title="Penukaran"
-        android:icon="@drawable/ic_bank" android:iconTint="@color/colorMenu">
-    </item>
+    <item
+        android:id="@+id/menuBeranda"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:iconTint="@color/colorMenu"
+        android:title="Beranda"></item>
+    <item
+        android:id="@+id/menuPenukaran"
+        android:enabled="true"
+        android:icon="@drawable/ic_bank"
+        android:iconTint="@color/colorMenu"
+        android:title="Penukaran"></item>
     <item android:id="@+id/menuScan" android:title="Scan"
         android:icon="@drawable/ic_search" android:iconTint="@color/colorMenu">
     </item>
