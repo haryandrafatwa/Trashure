@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@color/colorBackground"
     android:layout_height="match_parent"
-    tools:context=".AkunFragment">
+    tools:context=".Feature.Akun.AkunFragment">
 
 
     <RelativeLayout

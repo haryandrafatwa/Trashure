@@ -8,6 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.trashure.Feature.Akun.AkunFragment;
+import com.example.trashure.Feature.Beranda.BerandaFragment;
+import com.example.trashure.Feature.Harga.HargaFragment;
+import com.example.trashure.Feature.Penukaran.PenukaranFragment;
+import com.example.trashure.Feature.Scan.ScanFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;

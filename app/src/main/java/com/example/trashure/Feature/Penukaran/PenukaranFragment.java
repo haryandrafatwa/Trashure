@@ -1,4 +1,4 @@
-package com.example.trashure;
+package com.example.trashure.Feature.Penukaran;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,13 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.trashure.R;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 
 public class PenukaranFragment extends Fragment {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
     }
@@ -27,7 +29,8 @@ public class PenukaranFragment extends Fragment {
         eventPenukaran();
     }
 
-    private void eventPenukaran() {
+    private void eventPenukaran()
+    {
         final ExpandableRelativeLayout expandableRelativeLayout = (ExpandableRelativeLayout) getActivity().findViewById(R.id.expandableLayout);
         final LinearLayout llPulsa = (LinearLayout) getActivity().findViewById(R.id.ll_pulsa);
         final ImageView arrow = (ImageView) getActivity().findViewById(R.id.iv_penukaran_pulsa);
