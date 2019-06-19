@@ -9,4 +9,6 @@
     <color name="colorText">#416188</color>
     <color name="colorLayout">#F0F1F2</color>
     <color name="colorBtn">#FF5722</color>
+    <color name="colorTextGrey">#4D000000</color>
+    <color name="colorButton">#8BC34A</color>
 </resources>

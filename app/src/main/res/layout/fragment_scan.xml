@@ -3,12 +3,96 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Feature.Scan.ScanFragment">
+    tools:context=".Feature.Scan.ScanFragment"
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Scan Fragment"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="47dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/text-arahkan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="36dp"
+            android:text="@string/arahkan_ke"
+            android:textSize="13sp"
+            android:textColor="@color/colorTextGrey"
+            android:lineSpacingExtra="0sp"
+            />
+        
+        <SurfaceView
+            android:id="@+id/QRScanner"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/text-arahkan"
+            android:layout_marginTop="36dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            />
+
+        <ImageView
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@+id/QRScanner"
+            android:layout_marginTop="75dp"
+            android:background="@drawable/separator" />
+
+        <TextView
+            android:id="@+id/kode-id"
+            android:layout_below="@+id/separator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/kode_qr"
+            android:textSize="13sp"
+            android:textColor="@color/colorTextGrey"
+            android:lineSpacingExtra="0sp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/kode-id"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="36dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="193dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/kode-id"
+                android:background="@color/colorBackground"
+                android:hint="@string/masukkan_id"
+                android:paddingLeft="20dp"
+                android:paddingTop="21dp"
+                android:paddingBottom="21dp"
+                android:textSize="14sp"
+                android:textColor="@color/colorTextGrey"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorButton"
+                android:paddingLeft="40dp"
+                android:paddingTop="21dp"
+                android:paddingRight="40dp"
+                android:paddingBottom="21dp"
+                android:text="Scan"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </FrameLayout>

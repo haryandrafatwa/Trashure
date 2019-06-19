@@ -3,4 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="arahkan_ke">Arahkan ke QR code yang ada pada Trashbag</string>
+    <string name="kode_qr">atau masukan kode ID Trashbag</string>
+    <string name="masukkan_id">Masukkan ID</string>
 </resources>
