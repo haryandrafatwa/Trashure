@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/white">
@@ -20,9 +20,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="32dp"
             android:text="@string/arahkan_ke"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textColor="@color/colorTextGrey"
             android:lineSpacingExtra="0sp"
             />
@@ -30,10 +30,11 @@
         <SurfaceView
             android:id="@+id/QRScanner"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_centerInParent="true"
+            android:layout_height="200dp"
             android:layout_below="@+id/text-arahkan"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="32dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
             />
@@ -43,8 +44,9 @@
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_below="@+id/QRScanner"
-            android:layout_marginTop="75dp"
-            android:background="@drawable/separator" />
+            android:layout_marginTop="40dp"
+            android:background="@drawable/separator"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/kode-id"
@@ -64,31 +66,33 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/kode-id"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="36dp"
-            android:layout_marginBottom="36dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal">
 
             <EditText
+                android:id="@+id/edit_id"
                 android:layout_width="193dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/kode-id"
-                android:background="@color/colorBackground"
+                android:background="@drawable/bg_edit_text"
                 android:hint="@string/masukkan_id"
-                android:paddingLeft="20dp"
-                android:paddingTop="21dp"
-                android:paddingBottom="21dp"
+                android:paddingLeft="18dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
                 android:textSize="14sp"
-                android:textColor="@color/colorTextGrey"/>
+                android:textColor="@color/colorTextGrey"
+                android:inputType="text"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorButton"
+                android:background="@drawable/bg_btn_green"
                 android:paddingLeft="40dp"
-                android:paddingTop="21dp"
                 android:paddingRight="40dp"
-                android:paddingBottom="21dp"
-                android:text="Scan"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="@string/scan"
+                android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
         </LinearLayout>

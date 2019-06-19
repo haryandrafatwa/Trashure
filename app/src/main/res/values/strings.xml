@@ -6,4 +6,5 @@
     <string name="arahkan_ke">Arahkan ke QR code yang ada pada Trashbag</string>
     <string name="kode_qr">atau masukan kode ID Trashbag</string>
     <string name="masukkan_id">Masukkan ID</string>
+    <string name="scan">Scan</string>
 </resources>
