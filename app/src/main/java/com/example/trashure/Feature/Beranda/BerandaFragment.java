@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 import com.example.trashure.R;
 
 
-public class BerandaFragment extends Fragment {
-
-
+public class BerandaFragment extends Fragment{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

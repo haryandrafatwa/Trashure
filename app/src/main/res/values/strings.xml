@@ -7,4 +7,12 @@
     <string name="kode_qr">atau masukan kode ID Trashbag</string>
     <string name="masukkan_id">Masukkan ID</string>
     <string name="scan">Scan</string>
+    <string name="sampah_terkumpul">Sampah Terkumpul</string>
+    <string name="lihat_semua">Lihat Semua</string>
+    <string name="ket_id_trasbg">Trashbag ID</string>
+    <string name="id_trasbg">1304A327FA</string>
+    <string name="proses">Proses</string>
+    <string name="setoran">Setoran</string>
+    <string name="tips">Tips</string>
+    <string name="tgl_setoran">24 / 04 / 2019</string>
 </resources>

@@ -14,6 +14,7 @@ import com.example.trashure.Feature.Harga.HargaFragment;
 import com.example.trashure.Feature.Penukaran.PenukaranFragment;
 import com.example.trashure.Feature.Scan.ScanFragment;
 
+
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
@@ -21,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavBar);
         final AkunFragment akunFragment = new AkunFragment();
         final PenukaranFragment penukaranFragment = new PenukaranFragment();

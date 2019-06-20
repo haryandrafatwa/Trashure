@@ -1,15 +1,265 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
     tools:context=".Feature.Beranda.BerandaFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Beranda Fragment"
-        android:gravity="center"/>
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="10dp">
 
-</FrameLayout>
+            <TextView
+                android:id="@+id/appName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="28sp"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"
+                />
+
+            <ImageButton
+                android:id="@+id/bell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bell_vector"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/setting"
+                android:layout_marginRight="24dp"/>
+            <ImageButton
+                android:id="@+id/setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_vector"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/bg_menu_beranda"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            >
+
+            <TextView
+                android:id="@+id/dompet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DOMPET"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:paddingVertical="12dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="16dp"
+                />
+
+            <TextView
+                android:id="@+id/uang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rp.150.000"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:paddingVertical="12dp"
+                android:textStyle="bold"
+                android:layout_marginRight="16dp"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_menu_green"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp">
+                <TextView
+                android:id="@+id/ket_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Level :"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:id="@+id/level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Trashure Sejati"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/separator"
+                android:layout_width="2dp"
+                android:layout_height="70dp"
+                android:background="@drawable/separator"
+                android:layout_centerInParent="true"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp">
+                <TextView
+                    android:id="@+id/ket_trashbag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trashbag :"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:id="@+id/trashbag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Tidak Terhubung"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:id="@+id/sub_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sampah_terkumpul"
+                android:textSize="20sp"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="8dp"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_below="@+id/sub_title"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="23dp"
+                android:background="@drawable/dummy_chart" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackground"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp">
+            <TextView
+                android:id="@+id/setoran"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setoran"
+                android:textSize="20sp"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lihat_semua"
+                android:textSize="14sp"
+                android:textColor="@color/colorText"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvListNotes"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/list_setoran"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackground"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp">
+            <TextView
+                android:id="@+id/tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tips"
+                android:textSize="20sp"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"
+                />
+        </RelativeLayout>
+        <in.goodiebag.carouselpicker.CarouselPicker
+            android:id="@+id/carouselPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackground"
+            android:layout_marginTop="24dp"
+            android:layout_marginLeft="8dp"
+            app:items_visible="three">
+
+        </in.goodiebag.carouselpicker.CarouselPicker>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

@@ -38,4 +38,7 @@ dependencies {
 
     //QRScanner
     implementation 'com.google.android.gms:play-services-vision:15.0.0'
+
+    //Carousel
+    implementation 'com.github.Vatican-Cameos:CarouselPicker:v1.0'
 }
