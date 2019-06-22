@@ -6,7 +6,7 @@
     tools:context=".Feature.Scan.ScanFragment"
     android:background="@color/colorBackground"
     android:orientation="vertical">
-    <RelativeLayout
+  <!--  <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -96,6 +96,6 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
 </FrameLayout>

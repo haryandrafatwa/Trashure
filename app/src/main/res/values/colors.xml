@@ -11,4 +11,7 @@
     <color name="colorBtn">#FF5722</color>
     <color name="colorTextGrey">#4D000000</color>
     <color name="colorButton">#8BC34A</color>
+    <color name="colorBorder">#e0e0e0</color>
+    <color name="colorDrawable">#acd37e</color>
+    <color name="colorInputText">#9B9B9B</color>
 </resources>
