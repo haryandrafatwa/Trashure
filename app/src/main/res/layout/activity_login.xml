@@ -77,16 +77,13 @@
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/cb_ingat_saya"
+                android:text="Ingat saya"
+                android:textColor="@android:color/darker_gray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ingat saya "
-                android:layout_toRightOf="@id/cb_ingat_saya"
-                android:layout_centerInParent="true"/>
+
 
             <TextView
                 android:id="@+id/tv_lupa_password"
