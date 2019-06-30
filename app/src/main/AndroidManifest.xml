@@ -9,7 +9,7 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Feature.Register.RegisterActivity"></activity>
+        <activity android:name=".Feature.Register.RegisterActivity" android:parentActivityName=".Feature.Login.LoginActivity"></activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".Feature.Login.LoginActivity">
             <intent-filter>

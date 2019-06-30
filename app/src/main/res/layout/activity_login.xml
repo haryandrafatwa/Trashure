@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<android.support.v4.widget.NestedScrollView
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,168 +9,176 @@
     tools:context=".Feature.Login.LoginActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_marginStart="24dp"
-        android:background="@android:color/white"
-        android:layout_marginEnd="24dp"
         android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@android:color/white"
         >
 
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/logo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"/>
-
-        <TextView
-            android:id="@+id/tv_trashure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:paddingEnd="10dp"
-            android:layout_below="@id/iv_logo"
-            android:text="Trashure"
-            android:textAlignment="textStart"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"/>
-
-        <EditText
-            android:id="@+id/et_email_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_trashure"
-            android:layout_marginTop="50dp"
-            android:padding="12dp"
-            android:hint="Email"
-            android:textColor="@color/colorInputText"
-            android:textSize="14sp"
-            android:drawablePadding="10dp"
-            android:drawableStart="@drawable/ic_email"
-            android:drawableTint="@color/colorDrawable"
-            android:background="@drawable/bg_edittext"/>
-
-        <EditText
-            android:id="@+id/et_pass_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/et_email_login"
-            android:layout_marginTop="10dp"
-            android:padding="12dp"
-            android:inputType="textPassword"
-            android:drawableEnd="@drawable/ic_visibility"
-            android:textColor="@color/colorInputText"
-            android:hint="Password"
-            android:textSize="14sp"
-            android:drawablePadding="10dp"
-            android:drawableStart="@drawable/ic_lock"
-            android:background="@drawable/bg_edittext"/>
-
         <RelativeLayout
-            android:id="@+id/rl_login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_below="@id/et_pass_login">
+            android:layout_marginStart="24dp"
+            android:background="@android:color/white"
+            android:layout_marginEnd="24dp"
+            android:layout_height="match_parent"
+            >
 
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/cb_ingat_saya"
+            <ImageView
+                android:id="@+id/iv_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ingat saya "
-                android:layout_toRightOf="@id/cb_ingat_saya"
-                android:layout_centerInParent="true"/>
+                android:src="@drawable/logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"/>
 
             <TextView
-                android:id="@+id/tv_lupa_password"
+                android:id="@+id/tv_trashure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lupa Password?"
-                android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-                android:textColor="@color/colorText"
+                android:layout_centerHorizontal="true"
+                android:paddingEnd="10dp"
+                android:layout_below="@id/iv_logo"
+                android:text="Trashure"
+                android:textAlignment="textStart"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
                 android:textStyle="bold"/>
 
-        </RelativeLayout>
+            <EditText
+                android:id="@+id/et_email_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_trashure"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:hint="Email"
+                android:textColor="@color/colorInputText"
+                android:textSize="14sp"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/ic_email"
+                android:drawableTint="@color/colorDrawable"
+                android:background="@drawable/bg_edittext"/>
 
-        <Button
-            android:id="@+id/btn_masuk"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rl_login"
-            android:text="Masuk"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:background="@drawable/bg_btn2"
-            android:layout_marginTop="30dp"/>
+            <EditText
+                android:id="@+id/et_pass_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/et_email_login"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:inputType="textPassword"
+                android:drawableEnd="@drawable/ic_visibility"
+                android:textColor="@color/colorInputText"
+                android:hint="Password"
+                android:textSize="14sp"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/ic_lock"
+                android:background="@drawable/bg_edittext"/>
 
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="atau masuk dengan "
-            android:layout_below="@id/btn_masuk"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"/>
+            <RelativeLayout
+                android:id="@+id/rl_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_below="@id/et_pass_login">
 
-        <RelativeLayout
-            android:id="@+id/rl_login2"
-            android:layout_width="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/tv1"
-            android:layout_height="wrap_content">
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/cb_ingat_saya"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ingat saya "
+                    android:layout_toRightOf="@id/cb_ingat_saya"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:id="@+id/tv_lupa_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lupa Password?"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
 
             <Button
-                android:id="@+id/btn_facebook"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_toRightOf="@id/btn_google"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/facebook_button"
-                android:layout_marginTop="10dp" />
-
-            <Button
-                android:id="@+id/btn_google"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/google_button"
-                android:layout_marginTop="10dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/rl_login2">
-
-            <TextView
-                android:id="@+id/tv2"
-                android:layout_width="wrap_content"
+                android:id="@+id/btn_masuk"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="belum punya akun?" />
-
-            <TextView
-                android:id="@+id/tv_daftar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DAFTAR"
-                android:textColor="@color/colorText"
+                android:layout_below="@id/rl_login"
+                android:text="Masuk"
                 android:textStyle="bold"
-                android:layout_toRightOf="@id/tv2"
-                android:layout_marginStart="4dp"/>
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_btn2"
+                android:layout_marginTop="40dp"/>
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="atau masuk dengan "
+                android:layout_below="@id/btn_masuk"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_login2"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/tv1"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_facebook"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/btn_google"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/facebook_button"
+                    android:layout_marginTop="10dp" />
+
+                <Button
+                    android:id="@+id/btn_google"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/google_button"
+                    android:layout_marginTop="10dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/rl_login2">
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="belum punya akun?" />
+
+                <TextView
+                    android:id="@+id/tv_daftar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DAFTAR"
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold"
+                    android:layout_toRightOf="@id/tv2"
+                    android:layout_marginStart="4dp"/>
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
-
 
     </RelativeLayout>
-
-</RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

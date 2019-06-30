@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void LoginWithGoogle()
     {
+
     }
 
     private void LoginWithFacebook()

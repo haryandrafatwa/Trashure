@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Feature.Register.RegisterActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_register"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/white"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:layout_marginEnd="20dp"
+            android:layout_height="wrap_content"
+            android:text="Daftar" android:textColor="@android:color/black"
+            android:textSize="22sp"
+            android:gravity="center"/>
+        
+    </android.support.v7.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/et_nama_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar_register"
+        android:layout_marginTop="70dp"
+        android:padding="16dp"
+        android:hint="Nama"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/colorInputText"
+        android:textSize="14sp"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_person"
+        android:drawableTint="@color/colorDrawable"
+        android:background="@drawable/bg_edittext"/>
+
+    <EditText
+        android:id="@+id/et_email_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_nama_register"
+        android:layout_marginTop="10dp"
+        android:padding="16dp"
+        android:hint="Email"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/colorInputText"
+        android:textSize="14sp"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_email"
+        android:drawableTint="@color/colorDrawable"
+        android:background="@drawable/bg_edittext"/>
+
+    <EditText
+        android:id="@+id/et_nomorhp_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_email_register"
+        android:layout_marginTop="10dp"
+        android:padding="16dp"
+        android:hint="Nomor HP"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/colorInputText"
+        android:textSize="14sp"
+        android:inputType="phone"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_phone_black_24dp"
+        android:drawableTint="@color/colorDrawable"
+        android:background="@drawable/bg_edittext"/>
+
+    <EditText
+        android:id="@+id/et_pass_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_nomorhp_register"
+        android:layout_marginTop="10dp"
+        android:padding="16dp"
+        android:inputType="textPassword"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:drawableEnd="@drawable/ic_visibility"
+        android:textColor="@color/colorInputText"
+        android:hint="Password"
+        android:textSize="14sp"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_lock"
+        android:background="@drawable/bg_edittext"/>
+
+    <Button
+        android:id="@+id/btn_daftar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_pass_register"
+        android:text="Daftar"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_btn2"
+        android:layout_marginTop="30dp"/>
+    
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="atau daftar dengan"
+        android:layout_margin="10dp" 
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/btn_daftar"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_register1"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tv1"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_facebook_register"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@id/btn_google_register"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/facebook_button"
+            android:layout_marginTop="10dp" />
+
+        <Button
+            android:id="@+id/btn_google_register"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/google_button"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/rl_register1">
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sudah punya akun Trashure?" />
+
+        <TextView
+            android:id="@+id/tv_masuk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MASUK"
+            android:textColor="@color/colorText"
+            android:textStyle="bold"
+            android:layout_toRightOf="@id/tv2"
+            android:layout_marginStart="4dp"/>
+
+    </RelativeLayout>
+</RelativeLayout>
+</android.support.v4.widget.NestedScrollView>
