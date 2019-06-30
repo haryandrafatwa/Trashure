@@ -68,6 +68,7 @@
                     android:text="Level" />
 
                 <TextView
+                    android:id="@+id/tv_level_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -103,6 +104,7 @@
                     android:text="Saldo" />
 
                 <TextView
+                    android:id="@+id/tv_saldo_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -139,6 +141,7 @@
                     android:text="Total" />
 
                 <TextView
+                    android:id="@+id/tv_totalsampah_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -167,6 +170,7 @@
                 android:text="Nomor HP"/>
 
             <TextView
+                android:id="@+id/tv_nohandphone_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -191,6 +195,7 @@
                 android:text="Email"/>
 
             <TextView
+                android:id="@+id/tv_email_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -215,6 +220,7 @@
                 android:text="Tanggal Lahir"/>
 
             <TextView
+                android:id="@+id/tv_tgl_lahir_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
