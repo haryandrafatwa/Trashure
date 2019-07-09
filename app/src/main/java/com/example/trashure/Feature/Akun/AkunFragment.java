@@ -1,11 +1,11 @@
 package com.example.trashure.Feature.Akun;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.trashure.Feature.Login.LoginActivity;
-import com.example.trashure.MainActivity;
 import com.example.trashure.R;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunFragment extends Fragment {
 
+    GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth mAuth;
     DatabaseReference userRefs;
     String currentUserId;
@@ -38,7 +41,6 @@ public class AkunFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -56,6 +58,49 @@ public class AkunFragment extends Fragment {
 
     private void eventFragmentAkun() {
         initialize();
+    }
+
+    public void alertsignout()
+    {
+        AlertDialog.Builder alertDialog2 = new
+                AlertDialog.Builder(
+                getActivity());
+
+        // Setting Dialog Title
+        alertDialog2.setTitle("Konfirmasi Keluar");
+
+        // Setting Dialog Message
+        alertDialog2.setMessage("Apakah anda yakin ingin keluar?");
+
+        // Setting Positive "Yes" Btn
+        alertDialog2.setPositiveButton("Iya",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+                        FirebaseAuth.getInstance().signOut();
+                        Intent i = new Intent(getActivity(),
+                                LoginActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    }
+                });
+
+        // Setting Negative "NO" Btn
+        alertDialog2.setNegativeButton("Tidak",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+                        /*Toast.makeText(getContext(),
+                                "You clicked on NO", Toast.LENGTH_SHORT)
+                                .show();*/
+                        dialog.cancel();
+                    }
+                });
+
+        // Showing Alert Dialog
+        alertDialog2.show();
+
     }
 
     private void initialize() {
@@ -110,10 +155,11 @@ public class AkunFragment extends Fragment {
         btnKeluar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
+                /*mAuth.signOut();
                 Intent loginIntent = new Intent(getContext(),LoginActivity.class);
                 startActivity(loginIntent);
-                getActivity().finish();
+                getActivity().finish();*/
+                alertsignout();
             }
         });
 

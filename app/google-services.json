@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "715512860332-7n6pm60vrln2su4du0iv7oee5o4c75kh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trashure",
+            "certificate_hash": "963a27c76ebb9151a90a59c0c0530e751cba9a7a"
+          }
+        },
+        {
           "client_id": "715512860332-9bosvabd1dtreciebftu2safsgadf257.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
