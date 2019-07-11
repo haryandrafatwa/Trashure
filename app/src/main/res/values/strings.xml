@@ -15,4 +15,6 @@
     <string name="setoran">Setoran</string>
     <string name="tips">Tips</string>
     <string name="tgl_setoran">24 / 04 / 2019</string>
+    <string name="facebook_app_id">412402426152036</string>
+    <string name="fb_login_protocol_scheme">fb412402426152036</string>
 </resources>

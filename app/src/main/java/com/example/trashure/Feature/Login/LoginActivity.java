@@ -2,26 +2,34 @@ package com.example.trashure.Feature.Login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.UpdateLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v4.app.FragmentActivity;
 
 import com.example.trashure.Feature.Register.RegisterActivity;
 import com.example.trashure.MainActivity;
 import com.example.trashure.R;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -31,23 +39,31 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.ResourceBundle;
+
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 
 
 public class LoginActivity extends AppCompatActivity{
 
+    private LoginButton btnFacebook;
+    ImageView btnFacebookView;
+    private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
     ProgressDialog mDialog;
-    DatabaseReference userRefs;
-    GoogleSignInClient mGoogleSignInClient;
-    Button btnMasuk,btnFacebook,btnGoogle;
+    private DatabaseReference userRefs;
+    private GoogleSignInClient mGoogleSignInClient;
+    Button btnMasuk,btnGoogle;
     EditText etEmail,etPassword;
     CheckBox cbIngatSaya;
     TextView tvLupaPassword,tvDaftar;
@@ -66,13 +82,36 @@ public class LoginActivity extends AppCompatActivity{
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+        mCallbackManager = CallbackManager.Factory.create();
+        btnFacebook.setReadPermissions("email","public_profile");
+        btnFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "Facebook:onSuccess: "+loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(LoginActivity.this, "Login Batal", Toast.LENGTH_SHORT).show();
+                sendUserToLoginActivity();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG,error.toString());
+                sendUserToLoginActivity();
+            }
+        });
     }
 
     private void initialize() {
 
         mAuth = FirebaseAuth.getInstance();
         mDialog = new ProgressDialog(this);
-        btnFacebook = (Button) findViewById(R.id.btn_facebook);
+        btnFacebook = (LoginButton) findViewById(R.id.login_button);
         btnMasuk = (Button) findViewById(R.id.btn_masuk);
         btnGoogle = (Button) findViewById(R.id.btn_google);
         etEmail = (EditText) findViewById(R.id.et_email_login);
@@ -80,6 +119,7 @@ public class LoginActivity extends AppCompatActivity{
         cbIngatSaya = (CheckBox) findViewById(R.id.cb_ingat_saya);
         tvDaftar = (TextView) findViewById(R.id.tv_daftar);
         tvLupaPassword = (TextView) findViewById(R.id.tv_lupa_password);
+        btnFacebookView = (ImageView) findViewById(R.id.btn_facebook);
 
         etEmail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -119,19 +159,18 @@ public class LoginActivity extends AppCompatActivity{
                 loginWithEmailandPassword();
             }
         });
-        btnFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginWithFacebook();
-            }
-        });
         btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LoginWithGoogle();
             }
         });
-
+        btnFacebookView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnFacebook.performClick();
+            }
+        });
     }
 
 
@@ -150,8 +189,117 @@ public class LoginActivity extends AppCompatActivity{
         startActivityForResult(signInIntent,RC_SIGN_IN);
     }
 
-    private void LoginWithFacebook()
-    {
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        Toast.makeText(LoginActivity.this, "Tunggu sebentar ..", Toast.LENGTH_SHORT).show();
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            userRefs = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
+                            HashMap userMap = new HashMap();
+                            userMap.put("nama",user.getDisplayName());
+                            String phoneNumber = user.getPhoneNumber();
+                            if(phoneNumber == null){
+                                userMap.put("phonenumber","-");
+                            }else{
+                                userMap.put("phonenumber",user.getPhoneNumber());
+                            }
+                            userMap.put("jumlahsampah",0);
+                            userMap.put("saldo",0);
+                            userMap.put("level","-");
+                            userMap.put("email",user.getEmail());
+                            userMap.put("bod","-");
+
+                            userRefs.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if(task.isSuccessful())
+                                    {
+                                        Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                        mDialog.dismiss();
+                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(mainIntent);
+                                        finish();
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        mDialog.dismiss();
+                                    }
+                                }
+                            });
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            sendUserToLoginActivity();
+                        }
+                    }
+                });
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+        Toast.makeText(this, "Tunggu sebentar ..", Toast.LENGTH_SHORT).show();
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            userRefs = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
+                            HashMap userMap = new HashMap();
+                            userMap.put("nama",user.getDisplayName());
+                            String phoneNumber = user.getPhoneNumber();
+                            if(phoneNumber == null){
+                                userMap.put("phonenumber","-");
+                            }else{
+                                userMap.put("phonenumber",user.getPhoneNumber());
+                            }
+                            userMap.put("jumlahsampah",0);
+                            userMap.put("saldo",0);
+                            userMap.put("level","-");
+                            userMap.put("email",user.getEmail());
+                            userMap.put("bod","-");
+
+                            userRefs.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if(task.isSuccessful())
+                                    {
+                                        Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                        mDialog.dismiss();
+                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(mainIntent);
+                                        finish();
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        mDialog.dismiss();
+                                    }
+                                }
+                            });
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            sendUserToLoginActivity();
+                        }
+                    }
+                });
     }
 
     private void loginWithEmailandPassword()
@@ -208,63 +356,6 @@ public class LoginActivity extends AppCompatActivity{
         finish();
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        Toast.makeText(LoginActivity.this, "Tunggu sebentar ..", Toast.LENGTH_LONG).show();
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            userRefs = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
-                            HashMap userMap = new HashMap();
-                            userMap.put("nama",user.getDisplayName());
-                            String phoneNumber = user.getPhoneNumber();
-                            if(phoneNumber == null){
-                                userMap.put("phonenumber","-");
-                            }else{
-                             userMap.put("phonenumber",user.getPhoneNumber());
-                            }
-                            userMap.put("jumlahsampah",0);
-                            userMap.put("saldo",0);
-                            userMap.put("level","-");
-                            userMap.put("email",user.getEmail());
-                            userMap.put("bod","-");
-
-                            userRefs.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
-                                @Override
-                                public void onComplete(@NonNull Task task) {
-                                    if(task.isSuccessful())
-                                    {
-                                        Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
-                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(mainIntent);
-                                        finish();
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
-                                    }
-                                }
-                            });
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                            sendUserToLoginActivity();
-                        }
-                    }
-                });
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -280,9 +371,11 @@ public class LoginActivity extends AppCompatActivity{
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 // ...
+                Toast.makeText(this, "Login batal", Toast.LENGTH_SHORT).show();
                 sendUserToLoginActivity();
             }
         }
+        mCallbackManager.onActivityResult(requestCode,resultCode,data);
     }
 
     @Override
@@ -295,6 +388,7 @@ public class LoginActivity extends AppCompatActivity{
             sentToMainActivity();
         } else{
             mGoogleSignInClient.revokeAccess();
+            LoginManager.getInstance().logOut();
         }
     }
 

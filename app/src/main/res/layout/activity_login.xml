@@ -134,14 +134,30 @@
                 android:layout_below="@id/tv1"
                 android:layout_height="wrap_content">
 
-                <Button
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/login_button"
+                    android:visibility="gone"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/btn_google"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/facebook_button"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="centerInside"/>
+
+                <ImageView
                     android:id="@+id/btn_facebook"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_toRightOf="@id/btn_google"
                     android:layout_marginStart="20dp"
                     android:background="@drawable/facebook_button"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="centerInside"/>
 
                 <Button
                     android:id="@+id/btn_google"

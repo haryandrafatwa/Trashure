@@ -129,7 +129,17 @@
             android:layout_marginBottom="10dp"
             android:layout_height="wrap_content">
 
-            <Button
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/register_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_toRightOf="@id/btn_google_register"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/facebook_button"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"/>
+
+            <ImageView
                 android:id="@+id/btn_facebook_register"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

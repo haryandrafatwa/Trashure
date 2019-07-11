@@ -13,4 +13,9 @@
         <item name = "android:windowNoTitle">true</item>
     </style>
 
+    <style name="FacebookLoginButton">
+        <item name="android:background">@drawable/facebook_button</item>
+        <item name="android:text"></item>
+    </style>
+
 </resources>
