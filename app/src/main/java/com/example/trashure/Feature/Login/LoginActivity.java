@@ -2,12 +2,10 @@ package com.example.trashure.Feature.Login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telecom.Call;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -36,6 +34,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -43,19 +43,24 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.Map;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-
+import com.google.firebase.database.ValueEventListener;
 
 
 public class LoginActivity extends AppCompatActivity{
 
+    private Boolean userStat;
     private LoginButton btnFacebook;
     ImageView btnFacebookView;
     private CallbackManager mCallbackManager;
@@ -173,8 +178,6 @@ public class LoginActivity extends AppCompatActivity{
         });
     }
 
-
-
     private void sendUserToLoginActivity()
     {
         Intent homeIntent = new Intent(LoginActivity.this,LoginActivity.class);
@@ -185,7 +188,7 @@ public class LoginActivity extends AppCompatActivity{
     private void LoginWithGoogle()
     {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        Toast.makeText(LoginActivity.this, "Tunggu sebentar ..", Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, "Tunggu sebentar ..", Toast.LENGTH_SHORT).show();
         startActivityForResult(signInIntent,RC_SIGN_IN);
     }
 
@@ -201,38 +204,62 @@ public class LoginActivity extends AppCompatActivity{
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            userRefs = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
-                            HashMap userMap = new HashMap();
-                            userMap.put("nama",user.getDisplayName());
-                            String phoneNumber = user.getPhoneNumber();
-                            if(phoneNumber == null){
-                                userMap.put("phonenumber","-");
-                            }else{
-                                userMap.put("phonenumber",user.getPhoneNumber());
-                            }
-                            userMap.put("jumlahsampah",0);
-                            userMap.put("saldo",0);
-                            userMap.put("level","-");
-                            userMap.put("email",user.getEmail());
-                            userMap.put("bod","-");
-
-                            userRefs.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            userRefs = FirebaseDatabase.getInstance().getReference().child("User");
+                            userRefs.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
-                                public void onComplete(@NonNull Task task) {
-                                    if(task.isSuccessful())
-                                    {
-                                        Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
-                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(mainIntent);
-                                        finish();
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    userStat = new Boolean(true);
+                                    for (DataSnapshot dsp:dataSnapshot.getChildren()){
+                                        if (user.getUid().equalsIgnoreCase(dsp.getKey())){
+                                            userStat = true;
+                                            Log.d("CHECKING","ADA");
+                                            break;
+                                        }else{
+                                            userStat = false;
+                                            Log.d("CHECKING","GADA");
+                                        }
                                     }
-                                    else
-                                    {
-                                        Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
+                                    if (userStat){
+                                        sentToMainActivity();
+                                    }else{
+                                        HashMap userMap = new HashMap();
+                                        userMap.put("nama",user.getDisplayName());
+                                        String phoneNumber = user.getPhoneNumber();
+                                        if(phoneNumber == null){
+                                            userMap.put("phonenumber","-");
+                                        }else{
+                                            userMap.put("phonenumber",user.getPhoneNumber());
+                                        }
+                                        userMap.put("jumlahsampah",0);
+                                        userMap.put("saldo",0);
+                                        userMap.put("level","-");
+                                        userMap.put("email",user.getEmail());
+                                        userMap.put("bod","-");
+                                        userMap.put("displaypicture",user.getPhotoUrl().toString());
+                                        userRefs.child(user.getUid()).updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                                            @Override
+                                            public void onComplete(@NonNull Task task) {
+                                                if(task.isSuccessful())
+                                                {
+                                                    Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                                    mDialog.dismiss();
+                                                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                                    startActivity(mainIntent);
+                                                    finish();
+                                                }
+                                                else
+                                                {
+                                                    Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    mDialog.dismiss();
+                                                }
+                                            }
+                                        });
                                     }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                                 }
                             });
                         } else {
@@ -257,45 +284,69 @@ public class LoginActivity extends AppCompatActivity{
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            userRefs = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
-                            HashMap userMap = new HashMap();
-                            userMap.put("nama",user.getDisplayName());
-                            String phoneNumber = user.getPhoneNumber();
-                            if(phoneNumber == null){
-                                userMap.put("phonenumber","-");
-                            }else{
-                                userMap.put("phonenumber",user.getPhoneNumber());
-                            }
-                            userMap.put("jumlahsampah",0);
-                            userMap.put("saldo",0);
-                            userMap.put("level","-");
-                            userMap.put("email",user.getEmail());
-                            userMap.put("bod","-");
-
-                            userRefs.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            userRefs = FirebaseDatabase.getInstance().getReference().child("User");
+                            userRefs.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
-                                public void onComplete(@NonNull Task task) {
-                                    if(task.isSuccessful())
-                                    {
-                                        Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
-                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(mainIntent);
-                                        finish();
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    userStat = new Boolean(true);
+                                    for (DataSnapshot dsp:dataSnapshot.getChildren()){
+                                        if (user.getUid().equalsIgnoreCase(dsp.getKey())){
+                                            userStat = true;
+                                            Log.d("CHECKING","ADA");
+                                            break;
+                                        }else{
+                                            userStat = false;
+                                            Log.d("CHECKING","GADA");
+                                        }
                                     }
-                                    else
-                                    {
-                                        Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
+                                    if (userStat){
+                                        sentToMainActivity();
+                                    }else{
+                                        HashMap userMap = new HashMap();
+                                        userMap.put("nama",user.getDisplayName());
+                                        String phoneNumber = user.getPhoneNumber();
+                                        if(phoneNumber == null){
+                                            userMap.put("phonenumber","-");
+                                        }else{
+                                            userMap.put("phonenumber",user.getPhoneNumber());
+                                        }
+                                        userMap.put("jumlahsampah",0);
+                                        userMap.put("saldo",0);
+                                        userMap.put("level","-");
+                                        userMap.put("email",user.getEmail());
+                                        userMap.put("bod","-");
+                                        userMap.put("displaypicture",user.getPhotoUrl().toString());
+                                        userRefs.child(user.getUid()).updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                                            @Override
+                                            public void onComplete(@NonNull Task task) {
+                                                if(task.isSuccessful())
+                                                {
+                                                    Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                                    mDialog.dismiss();
+                                                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                                    startActivity(mainIntent);
+                                                    finish();
+                                                }
+                                                else
+                                                {
+                                                    Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    mDialog.dismiss();
+                                                }
+                                            }
+                                        });
                                     }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                                 }
                             });
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             sendUserToLoginActivity();
                         }
                     }

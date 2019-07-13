@@ -2,6 +2,7 @@ package com.example.trashure.Feature.Register;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -40,14 +43,21 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private Boolean userStat;
+    private StorageReference dummyDispPict;
     private CallbackManager mCallbackManager;
     LoginButton btnFacebook;
     ImageView btnFacebookView;
@@ -67,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         initialize();
+        dummyDispPict = FirebaseStorage.getInstance().getReference("DisplayPictures/dummy").child("UserLogo.png");
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -108,45 +119,69 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            userRefs = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
-                            HashMap userMap = new HashMap();
-                            userMap.put("nama",user.getDisplayName());
-                            String phoneNumber = user.getPhoneNumber();
-                            if(phoneNumber == null){
-                                userMap.put("phonenumber","-");
-                            }else{
-                                userMap.put("phonenumber",user.getPhoneNumber());
-                            }
-                            userMap.put("jumlahsampah",0);
-                            userMap.put("saldo",0);
-                            userMap.put("level","-");
-                            userMap.put("email",user.getEmail());
-                            userMap.put("bod","-");
-
-                            userRefs.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            userRefs = FirebaseDatabase.getInstance().getReference().child("User");
+                            userRefs.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
-                                public void onComplete(@NonNull Task task) {
-                                    if(task.isSuccessful())
-                                    {
-                                        Toast.makeText(RegisterActivity.this, "Daftar Berhasil", Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
-                                        Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                                        startActivity(mainIntent);
-                                        finish();
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    userStat = new Boolean(true);
+                                    for (DataSnapshot dsp:dataSnapshot.getChildren()){
+                                        if (user.getUid().equalsIgnoreCase(dsp.getKey())){
+                                            userStat = true;
+                                            Log.d("CHECKING","ADA");
+                                            break;
+                                        }else{
+                                            userStat = false;
+                                            Log.d("CHECKING","GADA");
+                                        }
                                     }
-                                    else
-                                    {
-                                        Toast.makeText(RegisterActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
+                                    if (userStat){
+                                        sentToMainActivity();
+                                    }else{
+                                        HashMap userMap = new HashMap();
+                                        userMap.put("nama",user.getDisplayName());
+                                        String phoneNumber = user.getPhoneNumber();
+                                        if(phoneNumber == null){
+                                            userMap.put("phonenumber","-");
+                                        }else{
+                                            userMap.put("phonenumber",user.getPhoneNumber());
+                                        }
+                                        userMap.put("jumlahsampah",0);
+                                        userMap.put("saldo",0);
+                                        userMap.put("level","-");
+                                        userMap.put("email",user.getEmail());
+                                        userMap.put("bod","-");
+                                        userMap.put("displaypicture",user.getPhotoUrl().toString());
+                                        userRefs.child(user.getUid()).updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                                            @Override
+                                            public void onComplete(@NonNull Task task) {
+                                                if(task.isSuccessful())
+                                                {
+                                                    Toast.makeText(RegisterActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                                    mDialog.dismiss();
+                                                    Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                                                    startActivity(mainIntent);
+                                                    finish();
+                                                }
+                                                else
+                                                {
+                                                    Toast.makeText(RegisterActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    mDialog.dismiss();
+                                                }
+                                            }
+                                        });
                                     }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                                 }
                             });
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             toRegister();
                         }
                     }
@@ -214,6 +249,12 @@ public class RegisterActivity extends AppCompatActivity {
         startActivityForResult(signInIntent,RC_SIGN_IN);
     }
 
+    private void sentToMainActivity(){
+        Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+        startActivity(mainIntent);
+        finish();
+    }
+
     private void toRegister(){
         Intent toRegister = new Intent(RegisterActivity.this,RegisterActivity.class);
         startActivity(toRegister);
@@ -247,51 +288,75 @@ public class RegisterActivity extends AppCompatActivity {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        Toast.makeText(RegisterActivity.this, "Tunggu sebentar ..", Toast.LENGTH_LONG).show();
+        Toast.makeText(RegisterActivity.this, "Tunggu sebentar ..", Toast.LENGTH_SHORT).show();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signUpWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            userRefs = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
-                            HashMap userMap = new HashMap();
-                            userMap.put("nama",user.getDisplayName());
-                            String phoneNumber = user.getPhoneNumber();
-                            if(phoneNumber == null){
-                                userMap.put("phonenumber","-");
-                            }else{
-                                userMap.put("phonenumber",user.getPhoneNumber());
-                            }
-                            userMap.put("jumlahsampah",0);
-                            userMap.put("saldo",0);
-                            userMap.put("level","-");
-                            userMap.put("email",user.getEmail());
-                            userMap.put("bod","-");
-
-                            userRefs.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                            Log.d(TAG, "signInWithCredential:success");
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            userRefs = FirebaseDatabase.getInstance().getReference().child("User");
+                            userRefs.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
-                                public void onComplete(@NonNull Task task) {
-                                    if(task.isSuccessful())
-                                    {
-                                        Toast.makeText(RegisterActivity.this, "Daftar Berhasil", Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
-                                        Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                                        startActivity(mainIntent);
-                                        finish();
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    userStat = new Boolean(true);
+                                    for (DataSnapshot dsp:dataSnapshot.getChildren()){
+                                        if (user.getUid().equalsIgnoreCase(dsp.getKey())){
+                                            userStat = true;
+                                            Log.d("CHECKING","ADA");
+                                            break;
+                                        }else{
+                                            userStat = false;
+                                            Log.d("CHECKING","GADA");
+                                        }
                                     }
-                                    else
-                                    {
-                                        Toast.makeText(RegisterActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        mDialog.dismiss();
+                                    if (userStat){
+                                        sentToMainActivity();
+                                    }else{
+                                        HashMap userMap = new HashMap();
+                                        userMap.put("nama",user.getDisplayName());
+                                        String phoneNumber = user.getPhoneNumber();
+                                        if(phoneNumber == null){
+                                            userMap.put("phonenumber","-");
+                                        }else{
+                                            userMap.put("phonenumber",user.getPhoneNumber());
+                                        }
+                                        userMap.put("jumlahsampah",0);
+                                        userMap.put("saldo",0);
+                                        userMap.put("level","-");
+                                        userMap.put("email",user.getEmail());
+                                        userMap.put("bod","-");
+                                        userMap.put("displaypicture",user.getPhotoUrl().toString());
+                                        userRefs.child(user.getUid()).updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
+                                            @Override
+                                            public void onComplete(@NonNull Task task) {
+                                                if(task.isSuccessful())
+                                                {
+                                                    Toast.makeText(RegisterActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                                    mDialog.dismiss();
+                                                    Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                                                    startActivity(mainIntent);
+                                                    finish();
+                                                }
+                                                else
+                                                {
+                                                    Toast.makeText(RegisterActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    mDialog.dismiss();
+                                                }
+                                            }
+                                        });
                                     }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                                 }
                             });
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signUpWithCredential:failure", task.getException());
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
                             //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             Toast.makeText(RegisterActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             toRegister();
@@ -334,7 +399,17 @@ public class RegisterActivity extends AppCompatActivity {
                         userMap.put("level","-");
                         userMap.put("email",email);
                         userMap.put("bod","-");
-
+                        dummyDispPict.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    userRefs.child("displaypicture").setValue(uri.toString());
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("DISPLAY PICTURE FAILED","OMG");
+                                }
+                            });
                         userRefs.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
                             @Override
                             public void onComplete(@NonNull Task task) {
@@ -342,9 +417,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 {
                                     Toast.makeText(RegisterActivity.this, "Daftar Berhasil", Toast.LENGTH_SHORT).show();
                                     mDialog.dismiss();
-                                    Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                                    startActivity(mainIntent);
-                                    finish();
+                                    sentToMainActivity();
                                 }
                                 else
                                 {
@@ -357,7 +430,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        Toast.makeText(RegisterActivity.this, "Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this,task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         mDialog.dismiss();
                     }
                 }
