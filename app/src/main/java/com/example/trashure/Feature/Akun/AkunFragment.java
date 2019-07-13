@@ -3,42 +3,43 @@ package com.example.trashure.Feature.Akun;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.trashure.Feature.EditProfile.EditProfileActivity;
 import com.example.trashure.Feature.Login.LoginActivity;
-import com.example.trashure.MainActivity;
 import com.example.trashure.R;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import org.w3c.dom.Text;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class AkunFragment extends Fragment {
 
+    final EditAkunFragment editAkun = new EditAkunFragment();
+    private ImageButton btnEdit;
     FirebaseAuth mAuth;
     DatabaseReference userRefs;
     String currentUserId;
     CircleImageView civProfileImage;
-    Button btnKeluar,btnEdit;
+    Button btnKeluar;
     TextView tvLevel,tvSaldo,tvTotalSampah,tvNomorHp,tvEmail,tvTglLahir,tvNama;
     private static final String TAG = "Upload";
 
@@ -64,6 +65,7 @@ public class AkunFragment extends Fragment {
     }
 
     private void initialize() {
+        btnEdit = (ImageButton) getActivity().findViewById(R.id.edit_button);
         btnKeluar = (Button) getActivity().findViewById(R.id.btn_keluar);
         tvLevel = (TextView) getActivity().findViewById(R.id.tv_level_profile);
         tvSaldo = (TextView) getActivity().findViewById(R.id.tv_saldo_profile);
@@ -91,9 +93,11 @@ public class AkunFragment extends Fragment {
                     String tgllahir = dataSnapshot.child("bod").getValue().toString();
                     String email = dataSnapshot.child("email").getValue().toString();
 
-                    if (dataSnapshot.hasChild("profileimage"))
+                    if (dataSnapshot.hasChild("displaypicture"))
                     {
-
+                        Picasso.with(getApplicationContext()).load(dataSnapshot.child("displaypicture").getValue().toString()).into(civProfileImage);
+                    } else {
+                        Picasso.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/trashure-71595.appspot.com/o/DisplayPictures%2Fdummy%2FUserLogo.png?alt=media&token=0ca8fe79-4dac-46c7-8356-0df6ea65464b").into(civProfileImage);
                     }
 
                     tvNama.setText(nama);
@@ -115,14 +119,20 @@ public class AkunFragment extends Fragment {
         btnKeluar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*mAuth.signOut();
-                Intent loginIntent = new Intent(getContext(),LoginActivity.class);
-                startActivity(loginIntent);
-                getActivity().finish();*/
                 alertsignout();
             }
         });
-
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frameFragment,editAkun);
+                fragmentTransaction.commit();*/
+                Intent registerIntent = new Intent(getActivity(), EditProfileActivity.class);
+                startActivity(registerIntent);
+                getActivity().finish();
+            }
+        });
     }
 
     public void alertsignout()

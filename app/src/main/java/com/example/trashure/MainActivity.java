@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.example.trashure.Feature.Akun.AkunFragment;
 import com.example.trashure.Feature.Beranda.BerandaFragment;
@@ -15,12 +17,19 @@ import com.example.trashure.Feature.Penukaran.PenukaranFragment;
 import com.example.trashure.Feature.Scan.ScanFragment;
 
 
+
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorAccent));
+
         setContentView(R.layout.activity_main);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavBar);
         final AkunFragment akunFragment = new AkunFragment();

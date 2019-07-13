@@ -280,7 +280,6 @@ public class RegisterActivity extends AppCompatActivity {
                 toRegister();
             }
         }
-
         mCallbackManager.onActivityResult(requestCode,resultCode,data);
     }
 
@@ -437,7 +436,5 @@ public class RegisterActivity extends AppCompatActivity {
             });
         }
     }
-
-
 
 }
